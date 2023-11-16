@@ -1,3 +1,4 @@
+import 'package:favorite_places/models/place.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 
@@ -11,8 +12,17 @@ class LocationInput extends StatefulWidget {
 }
 
 class _LocationInputState extends State<LocationInput> {
-  Location? _pickedLocation;
+  PlaceLocation? _pickedLocation;
   var _isGettingLocation = false;
+
+  String get locationImage {
+    if (_pickedLocation == null) {
+      return '';
+    }
+    final lat = _pickedLocation!.latitude;
+    final lng = _pickedLocation!.longitude;
+    return 'https://th.bing.com/th/id/R.09016b9a8bf49c66478907cdecc0ea10?rik=dXvHgN8qkxsc3A&riu=http%3a%2f%2fimg1.wikia.nocookie.net%2f__cb20110712111848%2ffinalfantasy%2fimages%2f8%2f8b%2fEorzea-map.jpg&ehk=uiu6wtvraRMVpcbo8CRfyQupDa1zuCPmYCY3eKgvbp0%3d&risl=&pid=ImgRaw&r=0';
+  }
 
   void _getCurrentLocation() async {
     setState(() {});
@@ -43,26 +53,44 @@ class _LocationInputState extends State<LocationInput> {
     });
 
     locationData = await location.getLocation();
+    final lat = locationData.latitude;
+    final lng = locationData.longitude;
+
+    if (lat == null || lng == null) {
+      return;
+    }
 
     setState(() {
+      _pickedLocation = PlaceLocation(
+        latitude: lat,
+        longitude: lng,
+      );
       _isGettingLocation = false;
     });
-
-    print(locationData.latitude);
-    print(locationData.longitude);
   }
 
   @override
   Widget build(BuildContext context) {
     Widget previewContent = Text(
-            'No location chosen',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.onBackground,
-                ),
-          );
-    
-    if(_isGettingLocation){previewContent=const CircularProgressIndicator();}
+      'No location chosen',
+      textAlign: TextAlign.center,
+      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+            color: Theme.of(context).colorScheme.onBackground,
+          ),
+    );
+
+    if (_pickedLocation != null) {
+      previewContent = Image.network(
+        locationImage,
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: double.infinity,
+      );
+    }
+
+    if (_isGettingLocation) {
+      previewContent = const CircularProgressIndicator();
+    }
 
     return Column(
       children: [

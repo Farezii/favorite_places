@@ -2,6 +2,10 @@
 
 Flutter project utilizing location and geolocation services, as well as API requests to Google API and saving data locally using SQFLite
 
+## Running
+
+Switch API_KEY_HERE instances in `location_input.dart` and `place_detail.dart` for the Google Maps API Key, found in [the Google Cloud Platform.](https://console.cloud.google.com/google/maps-apis/overview)
+
 ## Basic structure
 
 - models:
@@ -23,7 +27,7 @@ Flutter project utilizing location and geolocation services, as well as API requ
     - places_list.dart: Creates a ListView object which puts the created places in line, with a circular preview of the photo, the title of the place and it's human-readable address.
 
     - image_input.dart: Creates an object which interacts with the native camera features to take or select a picture, and then preview said photo.
-    
+
     - location_input.dart: Creates an object that can either obtain the current location of the user, or allows the user to choose a marker placement using Google Maps API, and afterwards use the chosen location data to interact with the Google Maps API to obtain a map witha single marker, which is shown on screen.
 
 - main.dart: Main app file from which the project is run.
